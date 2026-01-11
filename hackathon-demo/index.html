@@ -18,6 +18,44 @@
     <!-- Main Content -->
     <main class="main">
         <div class="container">
+            <!-- LLM Query Section -->
+            <section class="query-section">
+                <div class="query-header">
+                    <h2 class="query-title">
+                        <span class="icon">🤖</span>
+                        What would you like to compare?
+                    </h2>
+                    <div class="provider-status" id="provider-status">
+                        <span id="provider-indicator" class="status-indicator demo">Demo Mode</span>
+                    </div>
+                </div>
+                <div class="query-content">
+                    <div class="query-input-group">
+                        <input type="text" id="comparison-query" class="query-input" 
+                               placeholder="e.g., 'Which cloud provider should I choose for my startup?'">
+                        <button id="analyze-query" class="btn btn-primary query-btn">
+                            <span class="btn-text">Analyze with AI</span>
+                            <span class="btn-loading hidden">Analyzing...</span>
+                        </button>
+                    </div>
+                    <div class="query-suggestions">
+                        <div class="suggestions-label">Try these examples:</div>
+                        <div class="suggestions-list" id="query-suggestions">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="query-config">
+                        <button id="config-btn" class="btn btn-secondary btn-small" onclick="window.openConfigModal()">
+                            ⚙️ Configure LLM
+                        </button>
+                        <button id="manual-mode-btn" class="btn btn-secondary btn-small" onclick="window.switchToManualMode()">
+                            📝 Manual Mode
+                        </button>
+
+                    </div>
+                </div>
+            </section>
+
             <div class="demo-grid">
                 <!-- Options Panel -->
                 <section class="panel options-panel">
@@ -26,8 +64,27 @@
                             <span class="icon">📋</span>
                             Your Options
                         </h2>
+                        <div class="panel-actions">
+                            <button id="use-suggestions" class="btn btn-secondary btn-small hidden">
+                                ✨ Use AI Suggestions
+                            </button>
+                        </div>
                     </div>
                     <div class="panel-content">
+                        <div id="options-loading" class="loading-state hidden">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Generating options...</div>
+                        </div>
+                        <div id="suggested-options" class="suggested-options hidden">
+                            <div class="suggestions-header">
+                                <h4>💡 AI Suggestions</h4>
+                                <div class="suggestions-actions">
+                                    <button id="accept-all-suggestions" class="btn btn-primary btn-small">Accept All</button>
+                                    <button id="clear-suggestions" class="btn btn-secondary btn-small">Clear</button>
+                                </div>
+                            </div>
+                            <div id="suggestions-list" class="suggestions-list"></div>
+                        </div>
                         <div id="options-container" class="options-container">
                             <!-- Options will be dynamically added here -->
                         </div>
@@ -44,9 +101,21 @@
                             <span class="icon">⚖️</span>
                             Criteria Weights
                         </h2>
+                        <div class="panel-actions">
+                            <button id="regenerate-criteria" class="btn btn-secondary btn-small hidden">
+                                🔄 Regenerate
+                            </button>
+                        </div>
                     </div>
                     <div class="panel-content">
-                        <div class="weight-controls">
+                        <div id="criteria-loading" class="loading-state hidden">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Generating criteria...</div>
+                        </div>
+                        <div id="criteria-explanation" class="criteria-explanation hidden">
+                            <div class="explanation-text"></div>
+                        </div>
+                        <div class="weight-controls" id="weight-controls">
                             <div class="weight-item">
                                 <div class="weight-header">
                                     <label for="cost-weight">Cost (lower is better)</label>
@@ -180,6 +249,66 @@
         </div>
     </footer>
 
+    <!-- Configuration Modal -->
+    <div id="config-modal" class="modal hidden">
+        <div class="modal-overlay" id="modal-overlay" onclick="window.closeConfigModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>LLM Configuration</h3>
+                <button id="close-modal" class="modal-close" onclick="window.closeConfigModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-section">
+                    <label class="config-label">Provider</label>
+                    <select id="provider-select" class="config-select" onchange="try { if (window.llmIntegration) { window.llmIntegration.updateApiKeyVisibility(); } } catch(e) { /* Provider changed */ }">
+                        <option value="demo">Demo Mode (No API required)</option>
+                        <option value="openai">OpenAI GPT</option>
+                        <option value="anthropic">Anthropic Claude</option>
+                        <option value="lmstudio">LM Studio (Local)</option>
+                        <option value="local">Ollama (Local)</option>
+                    </select>
+                </div>
+                <div class="config-section" id="endpoint-section">
+                    <label class="config-label">API Endpoint</label>
+                    <input type="text" id="endpoint-input" class="config-input" 
+                           placeholder="e.g., http://localhost:1234/v1/chat/completions">
+                    <div class="config-help">
+                        For LM Studio, typically: http://localhost:1234/v1/chat/completions<br>
+                        For Ollama, typically: http://localhost:11434/api/generate
+                    </div>
+                </div>
+                <div class="config-section" id="model-section">
+                    <label class="config-label">Model Name</label>
+                    <input type="text" id="model-input" class="config-input" 
+                           placeholder="e.g., llama3.1:8b, gpt-4o-mini">
+                    <div class="config-help">
+                        The model name to use for requests. For local models, use the exact model name from your setup.
+                    </div>
+                </div>
+                <div class="config-section" id="api-key-section">
+                    <label class="config-label">API Key</label>
+                    <input type="password" id="api-key-input" class="config-input" 
+                           placeholder="Enter your API key (optional for local models)">
+                    <div class="config-help">
+                        Optional: Some local setups may require an API key. Leave blank if not needed.
+                    </div>
+                </div>
+                <div class="config-section">
+                    <div class="config-stats" id="config-stats">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="test-connection" class="btn btn-secondary" onclick="window.testLLMConnection()">🔗 Test Connection</button>
+                <button id="save-config" class="btn btn-primary" onclick="window.saveConfigModal()">Save Configuration</button>
+                <button id="clear-cache" class="btn btn-secondary" onclick="window.config && window.config.clearCache(); alert('Cache cleared!')">Clear Cache</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="llm-service.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
