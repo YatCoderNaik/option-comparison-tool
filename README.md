@@ -1,54 +1,78 @@
-# Option Comparison Tool
+# Smart Decision Maker - Option Comparison Tool
 
-A comprehensive decision-support tool that compares multiple options (APIs, cloud services, tech stacks, etc.) and presents structured trade-off analyses to help users make informed choices.
+A comprehensive decision-support tool that **explains trade-offs** and **helps users choose** rather than just providing rankings. Compare multiple options (APIs, cloud services, tech stacks, etc.) with systematic analysis and clear guidance.
 
-## 🚀 Quick Start
+## 🚀 **Quick Start - Hackathon Demo (Main UI)**
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
+**The easiest way to experience the tool:**
 
-### Installation
+1. **Open the Demo**: Navigate to `hackathon-demo/index.html` in any browser
+2. **Try Examples**: Click "Cloud Providers", "Laptops", or "Restaurants" 
+3. **Explore Features**: Adjust weights, set constraints, see trade-offs explained
+
+**Or serve locally:**
+```bash
+cd hackathon-demo
+python -m http.server 8000
+# Visit http://localhost:8000
+```
+
+## ✨ **Key Features**
+
+### 🎯 **Decision-Focused Design**
+- **Trade-off Analysis**: "Option A costs $50 more but has 2 points higher quality"
+- **Decision Guidance**: "If budget is critical, choose X. If performance matters, choose Y"
+- **Constraint Filtering**: Set hard requirements (max cost, min quality)
+- **Pros & Cons**: Qualitative strengths/weaknesses for each option
+- **Scenario Analysis**: See how different priorities change recommendations
+
+### 🔧 **Technical Capabilities**
+- **Multi-Criteria Decision Analysis (MCDA)**: Systematic evaluation using weighted scoring
+- **Constraint Management**: Define hard requirements and filters
+- **Confidence Scoring**: Measure decision reliability
+- **Interactive Visualizations**: Clear presentation of results and comparisons
+- **Extensible Architecture**: Modular design for easy customization
+
+## 📁 **Project Structure**
+
+```
+├── hackathon-demo/          # 🎯 MAIN UI - Clean, simple demo interface
+│   ├── index.html           # Ready-to-use demo (no build required)
+│   ├── styles.css           # Modern, clean styling
+│   ├── script.js            # Full functionality in vanilla JS
+│   └── README.md            # Demo-specific documentation
+├── src/                     # Core TypeScript implementation
+├── gui/gui-app/            # Advanced Vue.js interface (complex)
+├── .kiro/specs/            # Specification documents
+└── dist/                   # Built CLI and library files
+```
+
+## 🎮 **Usage Options**
+
+### 1. **Hackathon Demo** (Recommended for most users)
+- **Location**: `hackathon-demo/index.html`
+- **Features**: Full decision support with trade-offs and guidance
+- **Requirements**: Any modern web browser
+- **Best for**: Presentations, quick evaluations, learning the concepts
+
+### 2. **CLI Interface**
 ```bash
 npm install
-```
-
-### Build the Project
-```bash
 npm run build
+node dist/index.js
 ```
 
-### Run the Interactive Demo
+### 3. **Interactive TypeScript Demo**
 ```bash
 npm run demo
 ```
 
-### Use the CLI
+### 4. **Advanced Vue.js Interface**
 ```bash
-# Show help
-npm run cli help
-
-# Quick comparison example
-npm run cli quick
-
-# System health check
-npm run cli health
-
-# Run full demo
-npm run cli demo
-```
-
-### Create Custom Comparisons
-```bash
-# Run the customizable example
-npm run example
-
-# Edit example.ts to create your own comparisons
-```
-
-### Run Tests
-```bash
-npm test
+cd gui/gui-app
+npm install
+npm run dev
+# Visit http://localhost:5173
 ```
 
 ## 📊 Demo Scenarios

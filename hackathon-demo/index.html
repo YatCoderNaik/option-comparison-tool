@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Decision Maker - Option Comparison Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="title">Smart Decision Maker</h1>
+            <p class="subtitle">Compare options systematically with weighted criteria</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="demo-grid">
+                <!-- Options Panel -->
+                <section class="panel options-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="icon">📋</span>
+                            Your Options
+                        </h2>
+                    </div>
+                    <div class="panel-content">
+                        <div id="options-container" class="options-container">
+                            <!-- Options will be dynamically added here -->
+                        </div>
+                        <button id="add-option-btn" class="btn btn-primary">
+                            + Add Option
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Weights Panel -->
+                <section class="panel weights-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="icon">⚖️</span>
+                            Criteria Weights
+                        </h2>
+                    </div>
+                    <div class="panel-content">
+                        <div class="weight-controls">
+                            <div class="weight-item">
+                                <div class="weight-header">
+                                    <label for="cost-weight">Cost (lower is better)</label>
+                                    <span id="cost-display" class="weight-value">25%</span>
+                                </div>
+                                <input type="range" id="cost-weight" class="weight-slider" min="0" max="100" value="25">
+                            </div>
+                            
+                            <div class="weight-item">
+                                <div class="weight-header">
+                                    <label for="quality-weight">Quality</label>
+                                    <span id="quality-display" class="weight-value">30%</span>
+                                </div>
+                                <input type="range" id="quality-weight" class="weight-slider" min="0" max="100" value="30">
+                            </div>
+                            
+                            <div class="weight-item">
+                                <div class="weight-header">
+                                    <label for="speed-weight">Speed</label>
+                                    <span id="speed-display" class="weight-value">25%</span>
+                                </div>
+                                <input type="range" id="speed-weight" class="weight-slider" min="0" max="100" value="25">
+                            </div>
+                            
+                            <div class="weight-item">
+                                <div class="weight-header">
+                                    <label for="support-weight">Support</label>
+                                    <span id="support-display" class="weight-value">20%</span>
+                                </div>
+                                <input type="range" id="support-weight" class="weight-slider" min="0" max="100" value="20">
+                            </div>
+                        </div>
+                        
+                        <div class="weight-summary">
+                            <div class="total-weight">
+                                Total Weight: <span id="total-weight">100%</span>
+                            </div>
+                            <div id="weight-warning" class="weight-warning hidden">
+                                ⚠️ Weights should total 100%
+                            </div>
+                        </div>
+                        
+                        <button id="normalize-btn" class="btn btn-secondary">
+                            Auto-Balance Weights
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Results Panel -->
+                <section class="panel results-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="icon">🏆</span>
+                            Results & Trade-offs
+                        </h2>
+                    </div>
+                    <div class="panel-content">
+                        <!-- Constraints Section -->
+                        <div class="constraints-section">
+                            <h4 class="constraints-title">Constraints (Optional)</h4>
+                            <div class="constraints-grid">
+                                <div class="constraint-item">
+                                    <label>Max Cost ($)</label>
+                                    <input type="number" id="max-cost" placeholder="No limit">
+                                </div>
+                                <div class="constraint-item">
+                                    <label>Min Quality</label>
+                                    <input type="number" id="min-quality" min="1" max="10" placeholder="Any">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Decision Guidance -->
+                        <div id="decision-guidance" class="decision-guidance hidden">
+                            <h4 class="guidance-title">💡 Decision Guidance</h4>
+                            <div id="guidance-content" class="guidance-content"></div>
+                        </div>
+                        
+                        <!-- Results List -->
+                        <div id="results-container" class="results-container">
+                            <div class="no-results">
+                                Add some options to see results!
+                            </div>
+                        </div>
+                        
+                        <!-- Trade-off Analysis -->
+                        <div id="tradeoff-analysis" class="tradeoff-analysis hidden">
+                            <h4 class="tradeoff-title">⚖️ Key Trade-offs</h4>
+                            <div id="tradeoff-content" class="tradeoff-content"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Quick Examples -->
+    <footer class="footer">
+        <div class="container">
+            <div class="examples-section">
+                <h3 class="examples-title">
+                    <span class="icon">🚀</span>
+                    Quick Start Examples
+                </h3>
+                <div class="examples-grid">
+                    <button class="example-btn" data-example="cloud">
+                        <div class="example-icon">☁️</div>
+                        <div class="example-content">
+                            <div class="example-name">Cloud Providers</div>
+                            <div class="example-desc">AWS vs Azure vs GCP</div>
+                        </div>
+                    </button>
+                    
+                    <button class="example-btn" data-example="laptops">
+                        <div class="example-icon">💻</div>
+                        <div class="example-content">
+                            <div class="example-name">Laptops</div>
+                            <div class="example-desc">MacBook vs ThinkPad vs Surface</div>
+                        </div>
+                    </button>
+                    
+                    <button class="example-btn" data-example="restaurants">
+                        <div class="example-icon">🍕</div>
+                        <div class="example-content">
+                            <div class="example-name">Restaurants</div>
+                            <div class="example-desc">Pizza places comparison</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
